@@ -1,0 +1,120 @@
+<%- include('partials/head_tag') %>
+
+  <title>New Codes</title>
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <!-- Navigation bar (side panel)-->
+        <%- include('partials/nav') %>
+
+          <!-- Layout container -->
+          <div class="layout-page">
+
+            <!-- Header -->
+            <%- include('partials/header') %>
+
+              <!-- Content wrapper -->
+              <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+
+                  <!-- codes -->
+                  <div>
+                    <div class="col col-md-12">
+                      <div class="row">
+                        <div class="col-xl">
+                          <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                              <h5 class="mb-0">Basic Layout</h5>
+                              <small class="text-muted float-end">Default label</small>
+                            </div>
+                            <div class="card-body">
+                              <form id="codeForm">
+                                <div class="row">
+                                  <div class="col col-md-6">
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-fullname">codes</label>
+                                      <textarea name="code" id="basic-default-message" class="form-control"
+                                        placeholder="OBD code" autofocus style="height: 100px;"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-message">Description</label>
+                                      <textarea name="description" id="basic-default-message" class="form-control"
+                                        placeholder="Code description" style="height: 100px;"></textarea>
+                                    </div>
+                                  </div>
+
+                                  <!-- divider -->
+                                  <div class="col col-md-6">
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-message">Possible Causes</label>
+                                      <textarea name="possibleCauses" id="basic-default-message" class="form-control"
+                                        placeholder="Possible cause of problem" style="height: 100px;"></textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                      <label class="form-label" for="basic-default-message">Suggested Fixes</label>
+                                      <textarea name="suggestedFixes" id="basic-default-message" class="form-control"
+                                        placeholder="Suggest solution" style="height: 100px;"></textarea>
+                                    </div>
+                                  </div>
+                                  <button type="submit" class="btn btn-primary">Send</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Transactions -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- / Content -->
+
+              <!--  footer  -->
+              <%- include('partials/footer') %>
+                <!-- / Footer -->
+
+                <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Circular "Please Wait" Modal -->
+    <div class="modal fade" id="pleaseWaitModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+          <div class="modal-body">
+            <div class="spinner-border text-primary" role="status" style="width: 5rem; height: 5rem;">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <h5 class="mt-3">Please Wait</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- script tag -->
+    <%- include('partials/script-tag') %>
+
+      <script>
+        alertifying('codeForm', 'addNewCodes')
+      </script>
+
+  </body>
+
+  </html>

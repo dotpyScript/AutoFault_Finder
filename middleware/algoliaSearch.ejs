@@ -1,0 +1,20 @@
+const algoliasearch = require('algoliasearch')
+
+fetch("https://dashboard.algolia.com/sample_datasets/movie.json")
+.then((data) => data.json())
+.then((records) => {
+const client = algoliasearch(
+"VTXZSQMTP2",
+"e9eed703f212e1919cf3c7c03ddc4cfa"
+);
+
+<!-- input the database  -->
+const index = client.initIndex("your_index_name");
+
+index.saveObjects(records, { autoGenerateObjectIDIfNotExist: true });
+})
+.catch((error) => {
+console.error(error);
+});
+
+<!-- npm install algoliasearch@v4 -->

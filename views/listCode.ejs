@@ -1,0 +1,557 @@
+<%- include('partials/head_tag') %>
+
+  <title>List code</title>
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <!-- Navigation bar (side panel)-->
+        <%- include('partials/nav') %>
+
+          <!-- Layout container -->
+          <div class="layout-page">
+
+            <!-- Header -->
+            <%- include('partials/header') %>
+
+              <!-- Content wrapper -->
+              <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                  <div class="row">
+                    <div class="col-lg-12 mb-4 order-0">
+                      <div class="card">
+                        <div class="d-flex align-items-end row">
+                          <div class="col-sm-7">
+                            <div class="card-body">
+                              <h5 class="card-title text-primary">List of All Codes! 🚘</h5>
+                              <p class="mb-4">
+                                Search OBD codes across <span class="fw-bold">172</span> possible matches,
+                                integrated with
+                                a wide range of solutions
+                                for <span style="font-weight: 600;">TOYOTA</span> cars.
+                              </p>
+
+                              <a href="javascript:;" class="btn btn-sm btn-outline-primary">Learn more</a>
+                            </div>
+                          </div>
+                          <div class="col-sm-5 text-center text-sm-left">
+                            <div class="card-body pb-0 px-0 px-md-4">
+                              <img src="/assets/img/illustrations/man-with-laptop-light.png" height="140"
+                                alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png"
+                                data-app-light-img="illustrations/man-with-laptop-light.png" />
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- table start here -->
+                        <!-- <h5 class="card-header">Available Codes</h5> -->
+                        <div class="m-4 col">
+                          <input id="search" type="text" class="form-control" placeholder="Search for Code...">
+                        </div>
+                        <div class="table-responsive text-nowrap">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>Code</th>
+                                <th>Description</th>
+                                <th>possible Causes</th>
+                                <th>Suggested Fixes</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0" id="table">
+                              <% code.forEach(code=> { %>
+                                <tr>
+                                  <td class="text-wrap" style="width: 100px;">
+                                    <strong>
+                                      <%= code.code %>
+                                    </strong>
+                                  </td>
+                                  <td class="text-wrap" style="width: 200px;">
+                                    <%= code.description %>
+                                  </td>
+                                  <td class="text-wrap" style="width: 200px;">
+                                    <span class="badge bg-label-danger me-1 text-gray">
+                                      <%= code.possibleCauses %>
+                                    </span>
+                                  </td>
+                                  <td class="text-wrap" style="width: 200px;">
+                                    <span class="badge bg-label-primary me-1">
+                                      <%= code.suggestedFixes %>
+                                    </span>
+                                  </td>
+                                  <td class="text-wrap" style="width: 50px;">
+                                    <div class="dropstart">
+                                      <button type="button" class="btn p-0 dropdown-toggle hide-arrow "
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                      </button>
+                                      <div class="dropdown-menu mb-5">
+
+                                        <!-- edit -->
+                                        <a class="dropdown-item edit-btn" href="/addNewCodes" data-id="<%= code._id %>">
+                                          <i class="bx bx-plus me-1">
+                                          </i>
+                                          Add code
+                                        </a>
+
+                                        <!-- edit -->
+                                        <a class="dropdown-item edit-btn" href="javascript:void(0);"
+                                          data-id="<%= code._id %>">
+                                          <i class="bx bx-edit-alt me-1">
+                                          </i>
+                                          Edit
+                                        </a>
+
+                                        <!-- views -->
+                                        <a class="dropdown-item" href="/codes/<%= code._id %>"><i
+                                            class="bx bx-low-vision me-1"></i>View</a>
+
+                                        <!-- delete -->
+                                        <a class="dropdown-item text-danger" href="javascript:void(0);"
+                                          data-id="<%= code._id %>">
+                                          <i class="bx bx-trash me-1"></i> Delete</a>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- </div>
+              </div> -->
+
+              <!-- / Content -->
+
+              <!-- Circular "Please Wait" Modal -->
+              <div class="modal fade" id="pleaseWaitModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content text-center p-4">
+                    <div class="modal-body">
+                      <div class="spinner-border text-primary" role="status" style="width: 5rem; height: 5rem;">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                      <h5 class="mt-3">Please Wait</h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- edit modal -->
+
+              <!-- Footer -->
+              <%- include('partials/footer') %>
+                <!-- / Footer -->
+                <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+
+    <!-- Trigger the edit modal when the Edit button is clicked -->
+
+    <!-- Modal for Editing OBD code -->
+    <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCenterTitle">Edit OBD Code</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="editCodeForm">
+            <div class="modal-body">
+              <input type="hidden" id="codeId" name="id">
+              <div class="row g-2">
+                <div class="col mb-0">
+                  <label for="code" class="form-label">Code</label>
+                  <textarea name="code" id="editCode" class="form-control" placeholder="Code" autofocus></textarea>
+                </div>
+                <div class="col mb-0">
+                  <label for="description" class="form-label">Description</label>
+                  <textarea name="description" id="editDescription" class="form-control" placeholder="Code description"
+                    autofocus></textarea>
+                </div>
+              </div>
+              <div class="row g-2">
+                <div class="col mb-0">
+                  <label for="possibleCauses" class="form-label">Possible Causes</label>
+                  <textarea name="possibleCauses" id="editPossibleCauses" class="form-control"
+                    placeholder="Possible cause of problem" autofocus></textarea>
+                </div>
+                <div class="col mb-0">
+                  <label for="suggestedFixes" class="form-label">Suggested Fixes</label>
+                  <textarea name="suggestedFixes" id="editSuggestedFixes" class="form-control"
+                    placeholder="Suggest solution" autofocus></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" onclick="confirmEdit()">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirm Edit</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to save the changes?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="confirmSaveBtn">Yes, Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    <!-- / Layout wrapper -->
+
+    <!-- script tag -->
+    <%- include('partials/script-tag') %>
+
+      <!-- Scripts -->
+      <script>
+        // Function to open the edit modal and populate it with code data
+        $(document).ready(function () {
+          $('.edit-btn').on('click', function () {
+            const codeId = $(this).data('id');
+
+            // Fetch the code data using AJAX
+            $.ajax({
+              url: `/getCode/${codeId}`, // Adjust this endpoint to fetch the code data
+              type: 'GET',
+              success: function (data) {
+                // Populate the form with the fetched data
+                $('#codeId').val(data._id);
+                $('#editCode').val(data.code);
+                $('#editDescription').val(data.description);
+                $('#editPossibleCauses').val(data.possibleCauses);
+                $('#editSuggestedFixes').val(data.suggestedFixes);
+
+                // Show the modal
+                $('#modalCenter').modal('show');
+              },
+              error: function (error) {
+                Toastify({
+                  text: "Error fetching code details",
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                  close: true
+                }).showToast();
+              }
+            });
+          });
+        });
+
+        // Function to confirm the edit before submission
+        function confirmEdit() {
+          $('#confirmModal').modal('show'); // Show confirmation modal
+        }
+
+        // Handle form submission after confirmation
+        $('#confirmSaveBtn').click(function () {
+          const formData = $('#editCodeForm').serialize();
+          const codeId = $('#codeId').val(); // Get the code ID from the hidden input
+
+          $.ajax({
+            url: `/editCode/${codeId}`, // Endpoint to handle code updates
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+
+              // Close the modals
+              $('#modalCenter').modal('hide');
+              $('#confirmModal').modal('hide');
+              // Show the "Please Wait" modal
+              $("#pleaseWaitModal").modal("show");
+
+              // Optionally, refresh the page or update the table with the new data
+              setTimeout(() => {
+                $("#pleaseWaitModal").modal("hide");
+                Toastify({
+                  text: "Code updated successfully",
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                  close: true
+                }).showToast();
+              }, 2000);
+
+              setTimeout(() => {
+                location.reload();
+              }, 4000);
+            },
+            error: function (error) {
+              Toastify({
+                text: "Error updating code",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                close: true
+              }).showToast();
+            }
+          });
+        });
+      </script>
+
+      <!-- <script>
+        // Function to open the edit modal and populate it with code data
+        const codeId = $(this).data('id');
+
+        function openEditModal(codeId) {
+          $.ajax({
+            url: `/getCode/${codeId}`, // Adjust this endpoint to fetch the code data
+            type: 'GET',
+            success: function (data) {
+              // Populate the form with the fetched data
+              $('#codeId').val(data._id);
+              $('#editCode').val(data.code);
+              $('#editDescription').val(data.description);
+              $('#editPossibleCauses').val(data.possibleCauses);
+              $('#editSuggestedFixes').val(data.suggestedFixes);
+
+              // Show the modal
+              $('#modalCenter').modal('show');
+            },
+            error: function (error) {
+              Toastify({
+                text: "Error fetching code details",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                close: true
+              }).showToast();
+            }
+          });
+        }
+
+        // Function to confirm the edit before submission
+        function confirmEdit() {
+          $('#confirmModal').modal('show'); // Show confirmation modal
+        }
+
+        // Handle form submission after confirmation
+        $('#confirmSaveBtn').click(function () {
+          const formData = $('#editCodeForm').serialize();
+
+          $.ajax({
+            url: `/editCode/${$('#codeId').val()}`, // Endpoint to handle code updates
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+              Toastify({
+                text: "Code updated successfully",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                close: true
+              }).showToast();
+
+              // Close the modals
+              $('#modalCenter').modal('hide');
+              $('#confirmModal').modal('hide');
+
+              // Optionally, refresh the page or update the table with the new data
+              setTimeout(() => {
+                location.reload();
+              }, 2000);
+            },
+            error: function (error) {
+              Toastify({
+                text: "Error updating code",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                close: true
+              }).showToast();
+            }
+          });
+        });
+      </script> -->
+      <!-- <script>
+        $(document).ready(function () {
+          // Capture form submit event
+          $('#editCodeForm').submit(function (e) {
+            e.preventDefault();
+
+            // Store the form data in a serialized format
+            const formData = $(this).serialize();
+
+            // Open confirmation modal
+            $('#confirmModal').modal('show');
+
+            // Handle confirmation click
+            $('#confirmSave').click(function () {
+              $('#confirmModal').modal('hide');  // Hide confirm modal
+
+              // Send data to the server via POST
+              $.post('/editCodeForm', formData, function (response) {
+                Toastify({
+                  text: response.message,
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                  close: true
+                }).showToast();
+
+                // Show the "Please Wait" modal
+                $('#pleaseWaitModal').modal('show');
+
+                // Redirect after 3 seconds
+                setTimeout(function () {
+                  $('#pleaseWaitModal').modal('hide');
+                  window.location.href = response.redirect;  // Redirect to the desired page
+                }, 3000);
+
+              }).fail(function (response) {
+                const errors = response.responseJSON.errors;
+
+                if (errors) {
+                  errors.forEach(error => {
+                    Toastify({
+                      text: error,
+                      duration: 3000,
+                      gravity: "top",
+                      position: "right",
+                      backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                      close: true
+                    }).showToast();
+                  });
+                } else {
+                  Toastify({
+                    text: response.responseJSON.message,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    close: true
+                  }).showToast();
+                }
+              });
+            });
+          });
+
+          // Open modal and populate fields with code data
+          $('.edit-btn').click(function () {
+            const codeData = $(this).data('code');
+            $('#codeId').val(codeData._id);
+            $('#code').val(codeData.code);
+            $('#description').val(codeData.description);
+            $('#possibleCauses').val(codeData.possibleCauses);
+            $('#suggestedFixes').val(codeData.suggestedFixes);
+
+            $('#modalCenter').modal('show');  // Show edit modal
+          });
+        });
+
+      </script> -->
+      <script>
+        // Making an AJAX request to fetch the list of codes
+        $.ajax({
+          url: '/listCode',  // URL to your route
+          method: 'GET',
+          success: function (response) {
+            // Handle the success case (e.g., render codes to the DOM)
+            // This part depends on how you want to display the list
+          },
+          error: function (response) {
+            // Handle the error response and show with Toastify
+            const errorMessage = response.responseJSON.message || "Something went wrong!";
+            Toastify({
+              text: errorMessage,
+              duration: 3000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+              close: true
+            }).showToast();
+          }
+        });
+      </script>
+
+      <script>
+        // Handle delete button click
+        $('.delete-btn').click(function () {
+          const codeId = $(this).data('id');
+
+          if (confirm('Are you sure you want to delete this code?')) {
+            $.ajax({
+              url: `/codes/${codeId}`,
+              type: 'DELETE',
+              success: function (response) {
+                // Show success message with Toastify
+                Toastify({
+                  text: response.message,
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+                  close: true
+                }).showToast();
+
+                // Optionally remove the deleted code's row from the table
+                $(`tr[data-id="${codeId}"]`).remove();
+              },
+              error: function (response) {
+                Toastify({
+                  text: response.responseJSON.message,
+                  duration: 3000,
+                  gravity: "top",
+                  position: "right",
+                  backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                  close: true
+                }).showToast();
+              }
+            });
+          }
+        });
+      </script>
+
+      <!-- search table 2 Script -->
+      <script>
+        $("#search").on("keyup", function () {
+          var value = $(this).val().toLowerCase();
+          $("#table tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          });
+        });
+      </script>
+
+  </body>
+
+  </html>

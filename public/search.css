@@ -1,0 +1,19 @@
+@import "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.6.0/yeti/bootstrap.min.css";
+@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css";
+
+form label {
+  cursor: pointer;
+}
+
+.table-searchable .is-hidden {
+  display: none;
+}
+
+.table-searchable .is-match {
+  background-color: lawngreen;
+  transition: background-color 0.5s ease-in;
+}
+
+.table-searchable td[data-searchable="false"] {
+  background-color: lightcoral;
+}
