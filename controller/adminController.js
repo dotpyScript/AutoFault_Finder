@@ -111,7 +111,6 @@ const controller = {
 
       // Get the redirectTo URL from query parameters
       const redirectTo = req.query.redirectTo || "/index"; // Default to '/index' if not provided
-      console.log("Redirecting to:", redirectTo); // Log the redirect URL
 
       res
         .status(200)
@@ -226,6 +225,52 @@ const adminPanel = {
       res.json({ message: "Code updated successfully", code: updatedCode });
     } catch (err) {
       res.status(500).json({ message: "Server error" });
+    }
+  },
+
+  // Search code
+  searchCode: async (req, res) => {
+    const searchQuery = req.query.query;
+
+    try {
+      // Search for a code in the database
+      const code = await Codes.findOne({
+        $or: [
+          { code: { $regex: searchQuery, $options: "i" } }, // Search by code name
+          { description: { $regex: searchQuery, $options: "i" } }, // Search by description
+          { possibleCauses: { $regex: searchQuery, $options: "i" } }, // Search by possible causes
+          { suggestedFixes: { $regex: searchQuery, $options: "i" } }, // Search by suggested fixes
+        ],
+      });
+
+      if (code) {
+        // Respond with success and the code data
+        res.json({ success: true, code });
+      } else {
+        // Respond with no match found
+        res.json({ success: false, message: "No matching code found." });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: "Server Error" });
+    }
+  },
+
+  // Route to view the code detailsxxx
+  ViewSearchCode: async (req, res) => {
+    try {
+      const codeId = req.params.id;
+      // Find the code by its ID in the database
+      const foundCode = await Codes.findById(codeId);
+
+      if (foundCode) {
+        // Render the viewCode.ejs page and pass the code data to it
+        res.render("viewCode", { code: foundCode });
+      } else {
+        res.status(404).json({ message: "Code not found" });
+      }
+    } catch (err) {
+      res.status(500).json({ message: "Server error occurred" });
     }
   },
 };

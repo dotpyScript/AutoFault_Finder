@@ -58,11 +58,38 @@ router.delete("/codes/:id", async (req, res) => {
   }
 });
 
+// View specific code route
+router.get("/view/:id", auth, ensureUser, async (req, res) => {
+  const codeId = req.params.id;
+
+  try {
+    // Find the code by its ID
+    const code = await Codes.findById(codeId);
+
+    if (code) {
+      // Return JSON response with the redirect URL
+      const redirectUrl = `/viewCode/${code._id}`;
+      res.status(200).json({ redirect: redirectUrl });
+    } else {
+      // If the code is not found
+      res.status(404).json({ message: "Code not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching code:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
 // Route for fetching a single OBD code by ID
 router.get("/getCode/:id", auth, ensureUser, adminPanel.getCodeById); // New route to get a specific code
 
 // Route for updating an OBD code
 router.post("/editCode/:id", auth, ensureUser, adminPanel.updateCode); // Route to handle the update
+
+// Search route
+router.get("/search", auth, ensureUser, adminPanel.searchCode);
+
+router.get("/viewCode/:id", auth, ensureUser, adminPanel.ViewSearchCode);
 
 // Route: GET / logout
 router.get("/logout", logout.getLogout);
